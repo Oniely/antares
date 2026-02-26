@@ -4,7 +4,7 @@
       <div
          ref="explorebar"
          class="workspace-explorebar column"
-         :style="{width: localWidth ? localWidth+'px' : ''}"
+         :style="{ width: localWidth ? localWidth + 'px' : '' }"
          tabindex="0"
          @keypress="explorebarSearch"
          @keydown="explorebarSearch"
@@ -39,7 +39,7 @@
                      icon-name="mdiRefresh"
                      :size="18"
                      class="c-hand mr-2"
-                     :class="{'rotate':isRefreshing}"
+                     :class="{ 'rotate': isRefreshing }"
                      @click="refresh"
                   />
                </div>
@@ -209,7 +209,7 @@ const searchInput: Ref<HTMLInputElement> = ref(null);
 const explorebar: Ref<HTMLInputElement> = ref(null);
 const resizer: Ref<HTMLInputElement> = ref(null);
 const databases: Ref<string[]> = ref([]);
-const schema: Ref<Component & { selectSchema: (name: string) => void; $refs: {schemaAccordion: HTMLDetailsElement} }[]> = ref(null);
+const schema: Ref<Component & { selectSchema: (name: string) => void; $refs: { schemaAccordion: HTMLDetailsElement } }[]> = ref(null);
 const isRefreshing = ref(false);
 const isNewDBModal = ref(false);
 const localWidth = ref(null);
@@ -495,38 +495,38 @@ const toggleSearchMethod = () => {
 </script>
 
 <style lang="scss">
-  .workspace-explorebar-resizer {
-    position: absolute;
-    width: 4px;
-    right: -2px;
-    top: 0;
-    height: calc(100vh - #{$excluding-size});
-    cursor: ew-resize;
-    z-index: 99;
-    transition: background 0.2s;
+.workspace-explorebar-resizer {
+   position: absolute;
+   width: 4px;
+   right: -2px;
+   top: 0;
+   height: calc(100vh - #{$excluding-size});
+   cursor: ew-resize;
+   z-index: 99;
+   transition: background 0.2s;
 
-    &:hover {
+   &:hover {
       background: var(--primary-color-dark);
-    }
-  }
+   }
+}
 
-  .workspace-explorebar {
-    width: $explorebar-width;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-    text-align: left;
-    z-index: 8;
-    flex: initial;
-    position: relative;
-    padding: 0;
+.workspace-explorebar {
+   width: $explorebar-width;
+   display: flex;
+   flex-direction: column;
+   justify-content: flex-start;
+   align-items: center;
+   text-align: left;
+   z-index: 8;
+   flex: initial;
+   position: relative;
+   padding: 0;
 
-    &:focus {
+   &:focus {
       outline: none;
-    }
+   }
 
-    .workspace-explorebar-header {
+   .workspace-explorebar-header {
       width: 100%;
       padding: 0.3rem;
       display: flex;
@@ -536,32 +536,32 @@ const toggleSearchMethod = () => {
       text-transform: uppercase;
 
       .workspace-explorebar-title {
-        width: 80%;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        display: block;
-        align-items: center;
+         width: 80%;
+         white-space: nowrap;
+         overflow: hidden;
+         text-overflow: ellipsis;
+         display: block;
+         align-items: center;
       }
 
       .workspace-explorebar-tools {
-        display: flex;
-        align-items: center;
+         display: flex;
+         align-items: center;
 
          svg {
-          opacity: 0.6;
-          transition: opacity 0.2s;
-          display: flex;
-          align-items: center;
+            opacity: 0.6;
+            transition: opacity 0.2s;
+            display: flex;
+            align-items: center;
 
-          &:hover {
-            opacity: 1;
-          }
-        }
+            &:hover {
+               opacity: 1;
+            }
+         }
       }
-    }
+   }
 
-    .workspace-explorebar-database-switch {
+   .workspace-explorebar-database-switch {
       width: 100%;
       display: flex;
       justify-content: space-between;
@@ -577,9 +577,9 @@ const toggleSearchMethod = () => {
          height: 1.2rem;
          line-height: 1rem;
       }
-    }
+   }
 
-    .workspace-explorebar-search {
+   .workspace-explorebar-search {
       width: 100%;
       display: flex;
       justify-content: space-between;
@@ -589,35 +589,35 @@ const toggleSearchMethod = () => {
       z-index: 10;
 
       .has-icon-right {
-        width: 100%;
-        padding: 0.1rem;
+         width: 100%;
+         padding: 0.1rem;
 
-        .form-icon {
-          opacity: 0.5;
-          transition: opacity 0.2s;
-        }
+         .form-icon {
+            opacity: 0.5;
+            transition: opacity 0.2s;
+         }
 
-        .form-input {
-          height: 1.2rem;
-          padding-left: 0.2rem;
-          border-radius:0 $border-radius $border-radius 0;
+         .form-input {
+            height: 1.2rem;
+            padding-left: 0.2rem;
+            border-radius: 0 $border-radius $border-radius 0;
 
-          &:focus + .form-icon {
-            opacity: 0.9;
-          }
+            &:focus+.form-icon {
+               opacity: 0.9;
+            }
 
-          &::placeholder {
-            opacity: 0.6;
-          }
-        }
+            &::placeholder {
+               opacity: 0.6;
+            }
+         }
       }
-    }
+   }
 
-    .workspace-explorebar-body {
+   .workspace-explorebar-body {
       width: 100%;
       height: calc((100vh - 63px) - #{$excluding-size});
       overflow: overlay;
       padding: 0 0.1rem;
-    }
-  }
+   }
+}
 </style>

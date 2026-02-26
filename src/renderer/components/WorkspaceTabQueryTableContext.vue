@@ -3,6 +3,19 @@
       :context-event="contextEvent"
       @close-context="closeContext"
    >
+      <div
+         v-if="selectedRows.length === 1"
+         class="context-element"
+         @click="viewRowDetails"
+      >
+         <span class="d-flex">
+            <BaseIcon
+               icon-name="mdiTableEye"
+               class="mr-1 mt-1 text-light"
+               :size="18"
+            /> {{ t('database.viewDetails') }}
+         </span>
+      </div>
       <div class="context-element">
          <span class="d-flex">
             <BaseIcon
@@ -172,7 +185,8 @@ const emit = defineEmits([
    'copy-cell',
    'copy-row',
    'duplicate-row',
-   'fill-cell'
+   'fill-cell',
+   'view-row-details'
 ]);
 
 const fakerMethods = {
@@ -257,6 +271,11 @@ const duplicateRow = () => {
 
 const fillCell = (method: {name: string; group: string}) => {
    emit('fill-cell', { ...method, type: fakerGroup.value });
+   closeContext();
+};
+
+const viewRowDetails = () => {
+   emit('view-row-details');
    closeContext();
 };
 </script>

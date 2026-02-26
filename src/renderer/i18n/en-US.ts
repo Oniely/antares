@@ -291,7 +291,8 @@ export const enUS = {
       switchDatabase: 'Switch the database',
       searchForElements: 'Search for elements',
       searchForSchemas: 'Search for schemas',
-      savedQueries: 'Saved queries'
+      savedQueries: 'Saved queries',
+      viewDetails: 'View Details'
    },
    application: { // Application related terms
       settings: 'Settings',

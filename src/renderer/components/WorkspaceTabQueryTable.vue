@@ -21,6 +21,7 @@
          @fill-cell="fillCell"
          @copy-row="copyRow"
          @duplicate-row="duplicateRow"
+         @view-row-details="viewRowDetails"
          @close-context="closeContext"
       />
       <ul v-if="resultsWithRows.length > 1" class="tab tab-block result-tabs">
@@ -247,6 +248,16 @@
             </div>
          </template>
       </ConfirmModal>
+
+      <ModalRowDetails
+         v-if="isRowDetailsModal"
+         :row="selectedRowDetails"
+         :fields="fieldsObj"
+         :key-usage="keyUsage"
+         :element-type="elementType"
+         @hide="isRowDetailsModal = false"
+         @update-field="handleModalFieldUpdate"
+      />
    </div>
 </template>
 
@@ -268,6 +279,7 @@ import ConfirmModal from '@/components/BaseConfirmModal.vue';
 import BaseIcon from '@/components/BaseIcon.vue';
 import BaseSelect from '@/components/BaseSelect.vue';
 import BaseVirtualScroll from '@/components/BaseVirtualScroll.vue';
+import ModalRowDetails from '@/components/ModalRowDetails.vue';
 import TableContext from '@/components/WorkspaceTabQueryTableContext.vue';
 import WorkspaceTabQueryTableRow from '@/components/WorkspaceTabQueryTableRow.vue';
 import { copyText } from '@/libs/copyText';
@@ -315,10 +327,12 @@ const resultsSize = ref(0);
 const localResults: Ref<QueryResult<any>[]> = ref([]);
 const isContext = ref(false);
 const isDeleteConfirmModal = ref(false);
+const isRowDetailsModal = ref(false);
 const hasFocus = ref(false);
 const contextEvent = ref(null);
 const selectedCell = ref(null);
 const selectedRows = ref([]);
+const selectedRowDetails = ref<Record<string, unknown> | null>(null);
 const currentSort: Ref<{field: string; dir: 'asc' | 'desc'}[]> = ref([]);
 const resultsetIndex = ref(0);
 const scrollElement = ref(null);
@@ -535,6 +549,22 @@ const updateField = (payload: { field: string; type: string; content: any }, row
 
 const closeContext = () => {
    isContext.value = false;
+};
+
+const viewRowDetails = () => {
+   const row = localResults.value.find((r: any) => selectedRows.value.includes(r._antares_id));
+   selectedRowDetails.value = row ? { ...row } : null;
+   isRowDetailsModal.value = true;
+};
+
+const handleModalFieldUpdate = (payload: { orgField: string; field: string; type: string; content: any }) => {
+   // Keep selectedRowDetails in sync so the modal reflects saved values
+   if (selectedRowDetails.value)
+      selectedRowDetails.value = { ...selectedRowDetails.value, [payload.orgField]: payload.content };
+
+   // Re-use the existing updateField path to persist to the DB
+   const row = selectedRowDetails.value;
+   updateField({ field: payload.field, type: payload.type, content: payload.content }, row as any);
 };
 
 const showDeleteConfirmModal = (e: any) => {
