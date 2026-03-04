@@ -12,6 +12,7 @@ export function useResultTables (uid: string, reloadTable: () => void) {
       refreshScroller: () => void;
       downloadTable: (format: string, fileName: string) => void;
       applyUpdate: (payload: TableUpdateParams) => void;
+      refreshSelectedRow: () => void;
    }> = ref(null);
    const isQuering = ref(false);
 

@@ -22,7 +22,7 @@
                <div class="modal-body pb-0">
                   <div class="content">
                      <!-- Search bar -->
-                     <div class="search-wrapper mb-3">
+                     <div class="search-wrapper mb-2">
                         <div class="has-icon-left input-group">
                            <BaseIcon
                               icon-name="mdiMagnify"
@@ -45,6 +45,21 @@
                            </span>
                         </div>
                      </div>
+
+                     <!-- Refresh button -->
+                     <button
+                        class="btn btn-refresh mb-3"
+                        :disabled="isRefreshing"
+                        @click="onRefresh"
+                     >
+                        <BaseIcon
+                           :icon-name="isRefreshing ? 'mdiLoading' : 'mdiRefresh'"
+                           :class="{ 'spin': isRefreshing }"
+                           :size="15"
+                           class="mr-1"
+                        />
+                        {{ t('general.refresh') }}
+                     </button>
 
                      <!-- Column/Value rows -->
                      <div class="details-list">
@@ -228,11 +243,19 @@ const props = defineProps({
    elementType: { type: String, default: 'table' }
 });
 
-const emit = defineEmits(['hide', 'update-field']);
+const emit = defineEmits(['hide', 'update-field', 'refresh']);
 
 // ── Search ─────────────────────────────────────────────────────────────────
 const searchQuery = ref('');
 const searchInput = ref<HTMLInputElement>(null);
+
+// ── Refresh state ──────────────────────────────────────────────────────────
+const isRefreshing = ref(false);
+
+const onRefresh = () => {
+   isRefreshing.value = true;
+   emit('refresh');
+};
 
 // ── Local row copy (stays in sync with edits) ──────────────────────────────
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -241,6 +264,7 @@ const localRow = reactive<Record<string, any>>({});
 watch(() => props.row, (row) => {
    if (!row) return;
    Object.assign(localRow, row);
+   isRefreshing.value = false;
 }, { immediate: true });
 
 // ── Editing state ──────────────────────────────────────────────────────────
@@ -784,5 +808,28 @@ onBeforeUnmount(() => {
    text-align: center;
    opacity: 0.4;
    font-style: italic;
+}
+
+.btn-refresh {
+   display: flex;
+   align-items: center;
+   width: 20%;
+   justify-content: center;
+   gap: 0.25rem;
+   align-self: flex-end;
+   background-color: #272727;
+
+   &:hover {
+      opacity: 0.9;
+   }
+
+   .spin {
+      animation: spin 0.8s linear infinite;
+   }
+}
+
+@keyframes spin {
+   from { transform: rotate(0deg); }
+   to   { transform: rotate(360deg); }
 }
 </style>

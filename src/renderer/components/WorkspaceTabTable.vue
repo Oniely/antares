@@ -213,6 +213,7 @@
             @delete-selected="deleteSelected"
             @duplicate-row="showFakerModal"
             @hard-sort="hardSort"
+            @refresh-row-details="onRefreshRowDetails"
          />
       </div>
       <ModalFakerRows
@@ -264,6 +265,12 @@ const props = defineProps({
 const reloadTable = async () => {
    await nextTick();
    getTableData();
+};
+
+const onRefreshRowDetails = async () => {
+   await getTableData();
+   await nextTick();
+   queryTable.value?.refreshSelectedRow();
 };
 
 const {

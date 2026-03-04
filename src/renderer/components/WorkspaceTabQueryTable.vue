@@ -257,6 +257,7 @@
          :element-type="elementType"
          @hide="isRowDetailsModal = false"
          @update-field="handleModalFieldUpdate"
+         @refresh="emit('refresh-row-details')"
       />
    </div>
 </template>
@@ -317,7 +318,8 @@ const emit = defineEmits([
    'update-field',
    'delete-selected',
    'hard-sort',
-   'duplicate-row'
+   'duplicate-row',
+   'refresh-row-details'
 ]);
 
 const resultTable: Ref<Component & { updateWindow: () => void }> = ref(null);
@@ -565,6 +567,18 @@ const handleModalFieldUpdate = (payload: { orgField: string; field: string; type
    // Re-use the existing updateField path to persist to the DB
    const row = selectedRowDetails.value;
    updateField({ field: payload.field, type: payload.type, content: payload.content }, row as any);
+};
+
+const refreshSelectedRow = () => {
+   if (!selectedRowDetails.value || !isRowDetailsModal.value) return;
+   const pkValue = getPrimaryValue(selectedRowDetails.value);
+
+   let freshRow: any;
+   if (pkValue !== null && pkValue !== undefined)
+      freshRow = localResults.value.find((r: any) => getPrimaryValue(r) === pkValue);
+
+   if (freshRow)
+      selectedRowDetails.value = { ...freshRow };
 };
 
 const showDeleteConfirmModal = (e: any) => {
@@ -1056,7 +1070,8 @@ defineExpose({
    refreshScroller,
    resetSort,
    resizeResults,
-   downloadTable
+   downloadTable,
+   refreshSelectedRow
 });
 
 watch(() => props.results, () => {
