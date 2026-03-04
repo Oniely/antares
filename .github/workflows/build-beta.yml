@@ -32,17 +32,6 @@ jobs:
         run: | 
           npm i
           npm install "dmg-license" --save-optional
-
-      - name: Fix missing nested deps in ajv-formats (Windows)
-        if: matrix.os == 'windows-latest'
-        run: |
-          $base = "node_modules\ajv-formats\node_modules"
-          foreach ($pkg in @("fast-deep-equal", "fast-uri")) {
-            $src = "node_modules\$pkg"
-            $dest = "$base\$pkg"
-            if (!(Test-Path $dest)) { Copy-Item -Recurse $src $dest }
-          }
-        shell: pwsh
         
       - name: "Build"
         run: npm run build
